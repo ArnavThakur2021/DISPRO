@@ -1,0 +1,7 @@
+# Dispro
+
+
+The repository will contain some things that will be useful in future
+
+Thanks 
+Copyright (c) 2026 Arnav Thakur. All Rights Reserved.
