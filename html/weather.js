@@ -60,7 +60,7 @@ function processWeather(data) {
    UI STATES
 ================================ */
 function setSafe() {
-    document.body.style.backgroundImage = "url('images/brightday.jpg')";
+    document.body.style.backgroundImage = "url('../images/brightday.jpg')";
     document.getElementById("alertText").innerText =
         "Weather Conditions Are Normal";
     document.getElementById("currentStatus").innerText =
@@ -75,7 +75,7 @@ function setSafe() {
 }
 
 function setWindy(speed) {
-    document.body.style.backgroundImage = "url('images/windy.jpg')";
+    document.body.style.backgroundImage = "url('../images/windy.jpg')";
     document.getElementById("alertText").innerText =
         "Windy Conditions Detected In Your Area";
     document.getElementById("currentStatus").innerText =
@@ -90,7 +90,7 @@ function setWindy(speed) {
 }
 
 function setCyclone(speed) {
-    document.body.style.backgroundImage = "url('images/cyclone2.jpg')";
+    document.body.style.backgroundImage = "url('../images/cyclone2.jpg')";
     document.getElementById("alertText").innerText =
         "Severe Weather Alert";
     document.getElementById("currentStatus").innerText =
