@@ -91,11 +91,36 @@
         </div>
     </div>
 </section>
+<section class="map-section">
+    <div class="container">
+        <h2>Real-Time Hazard & Alert Map: India</h2>
+        <p>Live monitoring of fault lines, river banks, and active disaster zones.</p>
+        
+        <div id="india-map"></div>
+    </div>
+</section>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+    // Initialize the map centered on India
+    var map = L.map('india-map').setView([20.5937, 78.9629], 5);
+
+    // Add OpenStreetMap layer
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Example Marker for a Hazard Zone (e.g., Seismic Fault Line)
+    var marker = L.marker([28.6139, 77.2090]).addTo(map);
+    marker.bindPopup("<b>Delhi Region</b><br>Seismic Alert: Low Risk.").openPopup();
+</script>
 <footer class="dispro-footer">
     <div class="footer-container">
         <div class="footer-brand">
             <div class="footer-logo-unit">
-                <img src="C:\Users\Lenovo\Desktop\DISPRO\Gemini_Generated_Image_gecqxbgecqxbgecq.png"alt="DISPRO Shield Logo" class="footer-logo-img">
+                <img src="../Gemini_Generated_Image_gecqxbgecqxbgecq.png"alt="DISPRO Shield Logo" class="footer-logo-img">
                 <span class="footer-logo-text">DISPRO</span>
             </div>
             <p class="footer-tagline">Advanced Monitoring & Protection Systems for a Safer Tomorrow.</p>
@@ -104,7 +129,7 @@
         <div class="footer-links">
             <h4>Quick Links</h4>
             <ul>
-                <li><a href="file:///C:/Users/Lenovo/Desktop/DISPRO/html/web2.html#">Home</a></li>
+                <li><a href="web2.html#">Home</a></li>
                 <li><a href="#">Website Policies</a></li>
                 <li><a href="#">Help & FAQ</a></li>
                 <li><a href="#">Feedback</a></li>

@@ -6,18 +6,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
     font-family: 'Poppins', sans-serif;
     background: #dfe6ea;
 }
 
-/* Top Bar */
 .top-bar {
     display: flex;
     justify-content: space-between;
@@ -40,7 +35,6 @@ body {
     font-size: 14px;
 }
 
-/* Title */
 .title {
     text-align: center;
     margin-bottom: 20px;
@@ -51,25 +45,19 @@ body {
     font-weight: 700;
 }
 
-/* RVS Display */
 .rvs-box {
     text-align: center;
     margin-bottom: 20px;
-}
-
-.rvs-box h2 {
-    font-size: 22px;
 }
 
 .risk-low { color: green; }
 .risk-mid { color: orange; }
 .risk-high { color: red; }
 
-/* Form Container */
 .form-container {
     width: 70%;
     margin: auto;
-    background: rgba(255,255,255,0.7);
+    background: rgba(255,255,255,0.75);
     border-radius: 25px;
     padding: 40px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.08);
@@ -103,7 +91,6 @@ input[type="number"] {
     font-weight: 400;
 }
 
-/* Info Tooltip */
 .info {
     margin-left: 6px;
     font-weight: 700;
@@ -126,7 +113,6 @@ input[type="number"] {
     white-space: nowrap;
 }
 
-/* Submit */
 .submit-btn {
     display: block;
     margin: 30px auto 0;
@@ -145,7 +131,6 @@ input[type="number"] {
 
 <div class="top-bar">
     <a href="web3.html" class="back">←</a>
-    <button class="update-btn">Sample filled Form</button>
 </div>
 
 <div class="title">
@@ -155,135 +140,190 @@ input[type="number"] {
 <div class="rvs-box">
     <h2 id="rvsScore">RVS Score: --</h2>
     <h3 id="riskLevel"></h3>
+    <h4 id="zoneText"></h4>
 </div>
 
 <div class="form-container">
-<form id="buildingForm">
+<form>
 
-    <div class="form-group">
-        <label>Address</label>
-        <input type="text">
+<div class="form-group">
+    <label>Building Address</label>
+    <input type="text" id="address" placeholder="House no., Street, City, State">
+</div>
+
+<div class="form-group">
+    <label>Coordinates</label>
+    <input type="number" id="lat" placeholder="Latitude" step="any"><br><br>
+    <input type="number" id="lon" placeholder="Longitude" step="any">
+</div>
+
+<div class="form-group">
+    <label>No. of Stories</label>
+    <input type="number" id="stories">
+</div>
+
+<div class="form-group">
+    <label>Year Built</label>
+    <input type="number" id="year">
+</div>
+
+<div class="form-group">
+    <label>Building Use</label>
+    <div class="options">
+        <label>
+            <input type="radio" name="use" value="residential">
+            Residential
+            <span class="info" data-tip="Used mainly for housing people">ⓘ</span>
+        </label>
+
+        <label>
+            <input type="radio" name="use" value="commercial">
+            Commercial
+            <span class="info" data-tip="Shops, offices, business use">ⓘ</span>
+        </label>
+
+        <label>
+            <input type="radio" name="use" value="industrial">
+            Industrial
+            <span class="info" data-tip="Factories, warehouses, heavy machinery">ⓘ</span>
+        </label>
+
+        <label>
+            <input type="radio" name="use" value="public">
+            Public / Essential
+            <span class="info" data-tip="Hospitals, schools, emergency buildings">ⓘ</span>
+        </label>
     </div>
+</div>
 
-    <div class="form-group">
-        <label>Coordinates</label>
-        <input type="number" id="lat" placeholder="Latitude" step="any"><br><br>
-        <input type="number" id="lon" placeholder="Longitude" step="any">
+<div class="form-group">
+    <label>Maximum Number of Persons Occupying the Building</label>
+    <input type="number" id="occupants" placeholder="e.g. 5, 20, 100">
+</div>
+
+<div class="form-group">
+    <label>Plan Shape</label>
+    <div class="options">
+        <label><input type="radio" name="plan" value="regular"> Rectangular</label>
+        <label><input type="radio" name="plan" value="irregular"> Irregular</label>
     </div>
+</div>
 
-    <div class="form-group">
-        <label>No. of Stories</label>
-        <input type="number" id="stories">
+<div class="form-group">
+    <label>Visual Condition</label>
+    <div class="options">
+        <label><input type="radio" name="condition" value="good"> Good</label>
+        <label><input type="radio" name="condition" value="bad"> Bad</label>
     </div>
+</div>
 
-    <div class="form-group">
-        <label>Year Built</label>
-        <input type="number" id="year">
+<div class="form-group">
+    <label>Soil Type</label>
+    <div class="options">
+        <label><input type="radio" name="soil" value="hard"> Hard</label>
+        <label><input type="radio" name="soil" value="hard"> Medium</label>
+        <label><input type="radio" name="soil" value="soft"> Soft</label>
     </div>
+</div>
 
-    <div class="form-group">
-        <label>Plan Shape</label>
-        <div class="options">
-            <label><input type="radio" name="plan" value="regular"> Rectangular</label>
-            <label><input type="radio" name="plan" value="irregular"> L / U / Irregular</label>
-        </div>
-    </div>
+<div class="form-group">
+<label>Structural System</label>
+<div class="options">
 
-    <div class="form-group">
-        <label>Visual Condition</label>
-        <div class="options">
-            <label><input type="radio" name="condition" value="good"> Good</label>
-            <label><input type="radio" name="condition" value="bad"> Bad</label>
-        </div>
-    </div>
+<label><input type="radio" name="type" value="RC">
+RC <span class="info" data-tip="Reinforced concrete frame with beams and columns">ⓘ</span></label>
 
-    <div class="form-group">
-        <label>Soil Type</label>
-        <div class="options">
-            <label><input type="radio" name="soil" value="hard"> Hard</label>
-            <label><input type="radio" name="soil" value="soft"> Soft</label>
-        </div>
-    </div>
+<label><input type="radio" name="type" value="URM">
+URM <span class="info" data-tip="Unreinforced masonry brick or stone buildings">ⓘ</span></label>
 
-    <div class="form-group">
-        <label>Building Type</label>
-        <div class="options">
-            <label>
-                <input type="radio" name="type" value="RC">
-                RC <span class="info" data-tip="Reinforced Concrete frame with beams and columns">ⓘ</span>
-            </label>
+<label><input type="radio" name="type" value="MRF">
+MRF <span class="info" data-tip="Moment resisting frame designed for seismic loads">ⓘ</span></label>
 
-            <label>
-                <input type="radio" name="type" value="URM">
-                URM <span class="info" data-tip="Unreinforced brick or stone masonry buildings">ⓘ</span>
-            </label>
+<label><input type="radio" name="type" value="WOOD">
+Wood/Timber <span class="info" data-tip="Lightweight timber framed construction">ⓘ</span></label>
 
-            <label>
-                <input type="radio" name="type" value="MRF">
-                MRF <span class="info" data-tip="Moment Resisting Frame designed for earthquakes">ⓘ</span>
-            </label>
-        </div>
-    </div>
+<label><input type="radio" name="type" value="STEEL">
+Steel Frame <span class="info" data-tip="Structural steel moment or braced frame">ⓘ</span></label>
 
-    <button type="button" class="submit-btn" onclick="calculateRVS()">
-        Submit
-    </button>
+<label><input type="radio" name="type" value="LMF">
+Light Metal <span class="info" data-tip="Cold-formed light metal framing systems">ⓘ</span></label>
+
+<label><input type="radio" name="type" value="PRECAST">
+Precast Concrete <span class="info" data-tip="Factory-made concrete elements assembled on site">ⓘ</span></label>
+
+<label><input type="radio" name="type" value="MIXED">
+Mixed / Other <span class="info" data-tip="Combination of different structural systems">ⓘ</span></label>
+
+</div>
+</div>
+
+<button type="button" class="submit-btn" onclick="calculateRVS()">Submit</button>
 
 </form>
 </div>
 
 <script>
-function calculateRVS() {
-    let rvs = 4.0;
+function getSeismicZone(lat, lon) {
+    if (lat > 30 || (lat > 26 && lon > 92)) return "V";
+    if (lat > 26) return "IV";
+    if (lat > 23) return "III";
+    return "II";
+}
 
+function calculateRVS() {
+    let rvs;
+
+    const lat = parseFloat(document.getElementById("lat").value);
+    const lon = parseFloat(document.getElementById("lon").value);
     const stories = +document.getElementById("stories").value;
     const year = +document.getElementById("year").value;
-    const lat = document.getElementById("lat").value;
-    const lon = document.getElementById("lon").value;
 
     const plan = document.querySelector('input[name="plan"]:checked')?.value;
     const condition = document.querySelector('input[name="condition"]:checked')?.value;
     const soil = document.querySelector('input[name="soil"]:checked')?.value;
     const type = document.querySelector('input[name="type"]:checked')?.value;
 
-    if (!lat || !lon) {
-        alert("Please enter coordinates");
+    if (!lat || !lon || !type) {
+        alert("Please fill all required fields");
         return;
     }
 
-    if (type === "URM") rvs -= 1.0;
-    if (stories > 4) rvs -= 0.7;
-    if (year < 2000) rvs -= 0.5;
-    if (condition === "bad") rvs -= 0.8;
-    if (soil === "soft") rvs -= 0.6;
-    if (plan === "irregular") rvs -= 0.5;
+    const zone = getSeismicZone(lat, lon);
+    document.getElementById("zoneText").innerText = `Seismic Zone: ${zone}`;
+
+    const baseScores = {
+        II: { RC:3.8, URM:2.5, MRF:4.0, WOOD:4.2, STEEL:4.1, LMF:3.6, PRECAST:3.5, MIXED:3.0 },
+        III:{ RC:3.5, URM:2.2, MRF:3.8, WOOD:4.0, STEEL:3.9, LMF:3.3, PRECAST:3.2, MIXED:2.8 },
+        IV: { RC:3.2, URM:1.8, MRF:3.5, WOOD:3.8, STEEL:3.6, LMF:3.0, PRECAST:2.9, MIXED:2.4 },
+        V:  { RC:2.8, URM:1.3, MRF:3.1, WOOD:3.5, STEEL:3.2, LMF:2.7, PRECAST:2.5, MIXED:2.0 }
+    };
+
+    rvs = baseScores[zone][type];
+
+    if (stories > 4) rvs -= 0.6;
+    if (year < 2000) rvs -= 0.4;
+    if (condition === "bad") rvs -= 0.7;
+    if (soil === "soft") rvs -= 0.5;
+    if (soil === "medium") rvs -= 0.25;
+    if (plan === "irregular") rvs -= 0.4;
 
     rvs = rvs.toFixed(1);
 
-    document.getElementById("rvsScore").innerText =
-        `RVS Score: ${rvs}`;
+    document.getElementById("rvsScore").innerText = `RVS Score: ${rvs}`;
 
-    let riskText = "";
-    let riskClass = "";
+    let risk = "";
+    let cls = "";
 
-    if (rvs >= 3.0) {
-        riskText = "Low Seismic Risk";
-        riskClass = "risk-low";
-    } else if (rvs >= 2.0) {
-        riskText = "Moderate Seismic Risk";
-        riskClass = "risk-mid";
-    } else {
-        riskText = "High Seismic Risk";
-        riskClass = "risk-high";
-    }
+    if (rvs >= 3.5) { risk="Low Seismic Risk"; cls="risk-low"; }
+    else if (rvs >= 2.5) { risk="Moderate Seismic Risk"; cls="risk-mid"; }
+    else { risk="High Seismic Risk"; cls="risk-high"; }
 
     const riskEl = document.getElementById("riskLevel");
-    riskEl.innerText = riskText;
-    riskEl.className = riskClass;
+    riskEl.innerText = risk;
+    riskEl.className = cls;
 
     setTimeout(() => {
-        window.location.href =
-          `weather.html?lat=${lat}&lon=${lon}&rvs=${rvs}`;
+        window.location.href = `weather.html?lat=${lat}&lon=${lon}&rvs=${rvs}`;
     }, 1200);
 }
 </script>
