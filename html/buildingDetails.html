@@ -131,7 +131,6 @@ input[type="number"] {
 
 <div class="top-bar">
     <a href="web3.html" class="back">←</a>
-    <button class="update-btn">Sample filled Form</button>
 </div>
 
 <div class="title">
@@ -148,6 +147,11 @@ input[type="number"] {
 <form>
 
 <div class="form-group">
+    <label>Building Address</label>
+    <input type="text" id="address" placeholder="House no., Street, City, State">
+</div>
+
+<div class="form-group">
     <label>Coordinates</label>
     <input type="number" id="lat" placeholder="Latitude" step="any"><br><br>
     <input type="number" id="lon" placeholder="Longitude" step="any">
@@ -161,6 +165,40 @@ input[type="number"] {
 <div class="form-group">
     <label>Year Built</label>
     <input type="number" id="year">
+</div>
+
+<div class="form-group">
+    <label>Building Use</label>
+    <div class="options">
+        <label>
+            <input type="radio" name="use" value="residential">
+            Residential
+            <span class="info" data-tip="Used mainly for housing people">ⓘ</span>
+        </label>
+
+        <label>
+            <input type="radio" name="use" value="commercial">
+            Commercial
+            <span class="info" data-tip="Shops, offices, business use">ⓘ</span>
+        </label>
+
+        <label>
+            <input type="radio" name="use" value="industrial">
+            Industrial
+            <span class="info" data-tip="Factories, warehouses, heavy machinery">ⓘ</span>
+        </label>
+
+        <label>
+            <input type="radio" name="use" value="public">
+            Public / Essential
+            <span class="info" data-tip="Hospitals, schools, emergency buildings">ⓘ</span>
+        </label>
+    </div>
+</div>
+
+<div class="form-group">
+    <label>Maximum Number of Persons Occupying the Building</label>
+    <input type="number" id="occupants" placeholder="e.g. 5, 20, 100">
 </div>
 
 <div class="form-group">
