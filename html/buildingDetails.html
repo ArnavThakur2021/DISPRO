@@ -221,7 +221,7 @@ input[type="number"] {
     <label>Soil Type</label>
     <div class="options">
         <label><input type="radio" name="soil" value="hard"> Hard</label>
-        <label><input type="radio" name="soil" value="hard"> Medium</label>
+        <label><input type="radio" name="soil" value="medium"> Medium</label>
         <label><input type="radio" name="soil" value="soft"> Soft</label>
     </div>
 </div>
@@ -271,60 +271,72 @@ function getSeismicZone(lat, lon) {
 }
 
 function calculateRVS() {
-    let rvs;
-
+    const address = document.getElementById("address").value;
     const lat = parseFloat(document.getElementById("lat").value);
     const lon = parseFloat(document.getElementById("lon").value);
     const stories = +document.getElementById("stories").value;
     const year = +document.getElementById("year").value;
+    const occupants = +document.getElementById("occupants").value;
 
     const plan = document.querySelector('input[name="plan"]:checked')?.value;
     const condition = document.querySelector('input[name="condition"]:checked')?.value;
     const soil = document.querySelector('input[name="soil"]:checked')?.value;
     const type = document.querySelector('input[name="type"]:checked')?.value;
+    const use = document.querySelector('input[name="use"]:checked')?.value;
 
-    if (!lat || !lon || !type) {
+    if (!address || !lat || !lon || !type || !use || !soil) {
         alert("Please fill all required fields");
         return;
     }
 
     const zone = getSeismicZone(lat, lon);
-    document.getElementById("zoneText").innerText = `Seismic Zone: ${zone}`;
+    document.getElementById("zoneText").innerText =
+        `Seismic Zone: ${zone}`;
 
-    const baseScores = {
-        II: { RC:3.8, URM:2.5, MRF:4.0, WOOD:4.2, STEEL:4.1, LMF:3.6, PRECAST:3.5, MIXED:3.0 },
-        III:{ RC:3.5, URM:2.2, MRF:3.8, WOOD:4.0, STEEL:3.9, LMF:3.3, PRECAST:3.2, MIXED:2.8 },
-        IV: { RC:3.2, URM:1.8, MRF:3.5, WOOD:3.8, STEEL:3.6, LMF:3.0, PRECAST:2.9, MIXED:2.4 },
-        V:  { RC:2.8, URM:1.3, MRF:3.1, WOOD:3.5, STEEL:3.2, LMF:2.7, PRECAST:2.5, MIXED:2.0 }
+    const base = {
+        II:{RC:3.8,URM:2.5,MRF:4,WOOD:4.2,STEEL:4.1,LMF:3.6,PRECAST:3.5,MIXED:3},
+        III:{RC:3.5,URM:2.2,MRF:3.8,WOOD:4,STEEL:3.9,LMF:3.3,PRECAST:3.2,MIXED:2.8},
+        IV:{RC:3.2,URM:1.8,MRF:3.5,WOOD:3.8,STEEL:3.6,LMF:3,PRECAST:2.9,MIXED:2.4},
+        V:{RC:2.8,URM:1.3,MRF:3.1,WOOD:3.5,STEEL:3.2,LMF:2.7,PRECAST:2.5,MIXED:2}
     };
 
-    rvs = baseScores[zone][type];
+    let rvs = base[zone][type];
 
     if (stories > 4) rvs -= 0.6;
     if (year < 2000) rvs -= 0.4;
     if (condition === "bad") rvs -= 0.7;
-    if (soil === "soft") rvs -= 0.5;
     if (soil === "medium") rvs -= 0.25;
+    if (soil === "soft") rvs -= 0.5;
     if (plan === "irregular") rvs -= 0.4;
 
-    rvs = rvs.toFixed(1);
+    rvs = Number(rvs.toFixed(1));
 
-    document.getElementById("rvsScore").innerText = `RVS Score: ${rvs}`;
+    document.getElementById("rvsScore").innerText =
+        `RVS Score: ${rvs}`;
 
-    let risk = "";
-    let cls = "";
-
-    if (rvs >= 3.5) { risk="Low Seismic Risk"; cls="risk-low"; }
-    else if (rvs >= 2.5) { risk="Moderate Seismic Risk"; cls="risk-mid"; }
-    else { risk="High Seismic Risk"; cls="risk-high"; }
-
-    const riskEl = document.getElementById("riskLevel");
-    riskEl.innerText = risk;
-    riskEl.className = cls;
-
-    setTimeout(() => {
-        window.location.href = `weather.html?lat=${lat}&lon=${lon}&rvs=${rvs}`;
-    }, 1200);
+    fetch("https://YOUR_RENDER_BACKEND_URL/api/building/save", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": localStorage.getItem("token")
+        },
+        body: JSON.stringify({
+            address,
+            latitude: lat,
+            longitude: lon,
+            stories,
+            yearBuilt: year,
+            planShape: plan,
+            soilType: soil,
+            condition,
+            structureType: type,
+            buildingUse: use,
+            occupants,
+            seismicZone: zone,
+            rvsScore: rvs
+        })
+    })
+    .then(() => window.location.href = "weather.html");
 }
 </script>
 
