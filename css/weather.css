@@ -1,0 +1,94 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", sans-serif;
+}
+
+body {
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+}
+
+.overlay {
+    background: rgba(0,0,0,0.55);
+    height: 100%;
+    text-align: center;
+    padding: 40px 20px;
+}
+
+h1 {
+    font-size: 32px;
+    margin-bottom: 8px;
+}
+
+.subtitle {
+    font-size: 16px;
+    opacity: 0.9;
+}
+
+.icon-box {
+    margin: 30px auto;
+}
+
+.icon-box img {
+    width: 90px;
+    opacity: 0.9;
+}
+
+.status {
+    margin-bottom: 30px;
+}
+
+.current {
+    font-size: 22px;
+}
+
+.temp {
+    font-size: 28px;
+    margin: 8px 0;
+}
+
+.house {
+    font-size: 14px;
+    opacity: 0.85;
+}
+
+.cards {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.card {
+    width: 300px;
+    padding: 20px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.95);
+    color: #000;
+}
+
+.card h3 {
+    margin-bottom: 10px;
+}
+
+.do h3 {
+    color: #2ecc71;
+}
+
+.dont h3 {
+    color: #e74c3c;
+}
+
+ul {
+    list-style: none;
+    text-align: left;
+}
+
+li {
+    margin: 8px 0;
+    font-size: 14px;
+}

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather Alert</title>
+    <link rel="stylesheet" href="css/weather.css">
+</head>
+<body id="weatherBody">
+
+<div class="overlay">
+    <h1>Natural Disaster Alert System</h1>
+    <p class="subtitle" id="alertText">Loading weather data...</p>
+
+    <div class="icon-box">
+        <img src="images/wind-icon.jpg" id="weatherIcon">
+    </div>
+
+    <div class="status">
+        <p class="current" id="currentStatus">Currently: --</p>
+        <p class="temp" id="temperature">--°C</p>
+        <p class="house" id="houseStatus">
+            Checking house condition...
+        </p>
+    </div>
+
+    <div class="cards">
+        <div class="card do">
+            <h3>DO'S</h3>
+            <ul id="dosList"></ul>
+        </div>
+
+        <div class="card dont">
+            <h3>DON'TS</h3>
+            <ul id="dontsList"></ul>
+        </div>
+    </div>
+</div>
+
+<script src="js/weather.js"></script>
+</body>
+</html>
