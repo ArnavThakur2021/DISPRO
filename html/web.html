@@ -108,30 +108,69 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Initialize map centered on India
-        // This supports the DISPRO goal to detect disasters based on region [cite: 62]
-        var map = L.map('india-map').setView([20.5937, 78.9629], 5);
+        var map = L.map('india-map').setView([22.9734, 78.6569], 5);
 
-        // Add the physical map tiles
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 18,
             attribution: '© OpenStreetMap'
         }).addTo(map);
 
-        var coordDiv = document.getElementById('coordinate-display');
+        // Function to style the regions
+        function style(feature) {
+            return {
+                fillColor: '#58CCED', // Your brand blue
+                weight: 2,
+                opacity: 1,
+                color: 'white',
+                dashArray: '3',
+                fillOpacity: 0.3
+            };
+        }
 
-        // Interaction: Highlight location with cursor to fetch GPS details [cite: 24, 35]
-        map.on('mousemove', function(e) {
-            var lat = e.latlng.lat.toFixed(4);
-            var lng = e.latlng.lng.toFixed(4);
+        // Highlight function: Makes the area "bolder" on hover
+        function highlightFeature(e) {
+            var layer = e.target;
+
+            layer.setStyle({
+                weight: 5,        // Makes the border thicker/bolder
+                color: '#2c3e50', // Darker border color
+                dashArray: '',
+                fillOpacity: 0.7  // Makes the fill color stronger
+            });
+
+            if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+                layer.bringToFront();
+            }
             
-            coordDiv.innerHTML = `LIVE GPS | Latitude: ${lat} | Longitude: ${lng}`;
-        });
+            // Update DISPRO coordinate display
+            document.getElementById('coordinate-display').innerHTML = 
+                "Region Selected | Risk Analysis: Active [cite: 106]";
+        }
 
-        // Click to evaluate danger for a specific building/user [cite: 8]
-        map.on('click', function(e) {
-            alert("Analyzing Risk Severity for Lat: " + e.latlng.lat.toFixed(2));
-        });
+        // Reset function: Returns to normal when mouse leaves
+        function resetHighlight(e) {
+            geojson.resetStyle(e.target);
+            document.getElementById('coordinate-display').innerHTML = "Point to a location to see GPS data";
+        }
+
+        // Apply these interactions to each region
+        function onEachFeature(feature, layer) {
+            layer.on({
+                mouseover: highlightFeature,
+                mouseout: resetHighlight,
+                click: function(e) {
+                    map.fitBounds(e.target.getBounds());
+                }
+            });
+        }
+
+        /* Note: To see the "Bolder" effect, you need an India GeoJSON file. 
+           For this prototype, we are using a placeholder. 
+        */
+        var geojson = L.geoJson(indiaStatesData, {
+            style: style,
+            onEachFeature: onEachFeature
+        }).addTo(map);
     });
 </script>
 <footer class="dispro-footer">
