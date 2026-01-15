@@ -377,16 +377,6 @@ header.navbar{
     background-color: #fff;
     text-align: center;
 }
-#coordinate-display {
-    margin-top: 15px;
-    padding: 10px;
-    background: #1a1a1a;
-    color: #58CCED; /* Brand Blue */
-    font-family: 'Courier New', monospace;
-    font-weight: bold;
-    border-radius: 5px;
-    display: inline-block;
-}
 #india-map {
     height: 550px;
     width: 100%;
