@@ -9,19 +9,19 @@
 <body>
     <header>
         <nav class="navbar">
-            <a href="web3.html#" class="nav-logo">
+            <a href="web.html#" class="nav-logo">
                 <img src="../Gemini_Generated_Image_gecqxbgecqxbgecq.png" alt="DISPRO Logo" height ="100" width="5">
                 <h2 class="logo-text"> DISPRO</h2>
             </a>
             <ul class"nav-menu">
                 <ul class="nav-menu">
-                <li class="nav-item"><a href="web3.html#" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="web.html#" class="nav-link">Home</a></li>
                 <li class="nav-item"><a href="about.html#" class="nav-link">About</a></li>
                 <li class="nav-item dropdown">
                     <a href="#" class="nav-link">Menu <i class="fas fa-caret-down"></i></a>
                     <ul class="submenu">
                         <li><a href="buildingDetails.html">Calculate RVS score of your building</a></li>
-                        <li><a href="alerts.html">Disaster alert</a></li>
+                        <li><a href="weather.html">Disaster alert</a></li>
                     </ul>
                 </li>
                 <li class="nav-item"><a href="services.html#" class="nav-link">Services</a></li>
@@ -90,6 +90,61 @@
         </div>
     </div>
 </section>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+<section class="map-section">
+    <div class="container">
+        <h2>DISPRO Geographic Monitoring</h2>
+        <div class="map-wrapper">
+            <div id="india-map"></div>
+            
+            <div id="coordinate-info">
+                <div class="info-header">
+                    <i class="fas fa-satellite"></i> <strong>SYSTEM MONITORING</strong>
+                </div>
+                <p id="lat-display">Latitude: --</p>
+                <p id="lng-display">Longitude: --</p>
+                <p id="status-display">Status: Ready</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize map centered on India
+        // This supports the DISPRO goal to detect disasters based on region [cite: 62]
+        var map = L.map('india-map').setView([20.5937, 78.9629], 5);
+
+        // Add the physical map tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+
+        var coordDiv = document.getElementById('coordinate-display');
+
+        // Interaction: Highlight location with cursor to fetch GPS details 
+        map.on('mousemove', function(e) {
+            var lat = e.latlng.lat.toFixed(4);
+            var lng = e.latlng.lng.toFixed(4);
+            
+            document.getElementById('lat-display').innerHTML = "Latitude: " + lat; 
+            document.getElementById('lng-display').innerHTML = "Longitude: " + lng; 
+    
+            // 3. Optional: Update status to show active tracking
+            document.getElementById('status-display').innerHTML = "Status: Tracking Location"; 
+        });
+
+        // Click to evaluate danger for a specific building/user 
+        map.on('mousemove', function(e) {
+            document.getElementById('lat-display').innerHTML = "Latitude: " + e.latlng.lat.toFixed(4);
+            document.getElementById('lng-display').innerHTML = "Longitude: " + e.latlng.lng.toFixed(4);
+        });
+    });
+</script>
 <footer class="dispro-footer">
     <div class="footer-container">
         <div class="footer-brand">
@@ -103,8 +158,8 @@
         <div class="footer-links">
             <h4>Quick Links</h4>
             <ul>
-                <li><a href="web2.html#">Home</a></li>
-                <li><a href="#">Website Policies</a></li>
+                <li><a href="web3.html#">Home</a></li>
+                <li><a href="policy.html">Website Policies</a></li>
                 <li><a href="#">Help & FAQ</a></li>
                 <li><a href="#">Feedback</a></li>
             </ul>
