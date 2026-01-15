@@ -1,0 +1,94 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+    color: white;
+}
+
+.safe-bg {
+    background-image: url("../images/brightday.jpg");
+}
+
+.windy-bg {
+    background-image: url("../images/windy.jpg");
+}
+
+.cyclone-bg {
+    background-image: url("../images/cyclone2.jpg");
+}
+
+.tsunami-bg {
+    background-image: url("../images/tsunami.jpg");
+}
+
+.container {
+    background: rgba(0, 0, 0, 0.55);
+    padding: 40px;
+    max-width: 900px;
+    margin: auto;
+    margin-top: 60px;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.subtitle {
+    margin: 10px 0 20px;
+}
+
+.status {
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+}
+
+.safe {
+    background: rgba(0, 255, 0, 0.2);
+}
+
+.warning {
+    background: rgba(255, 165, 0, 0.2);
+}
+
+.danger {
+    background: rgba(255, 0, 0, 0.25);
+}
+
+.danger-text {
+    color: #ff4d4d;
+}
+
+.actions {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.box {
+    width: 300px;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.do {
+    background: rgba(0, 255, 0, 0.2);
+}
+
+.dont {
+    background: rgba(255, 0, 0, 0.2);
+}
+
+ul {
+    list-style: none;
+}
+
+li {
+    margin: 8px 0;
+}

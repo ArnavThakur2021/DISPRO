@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Building Details</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #dfe6ea;
+}
+
+/* Top Bar */
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+}
+
+.back {
+    font-size: 22px;
+    text-decoration: none;
+    color: #000;
+}
+
+.update-btn {
+    padding: 8px 18px;
+    border-radius: 20px;
+    border: none;
+    background: #2563eb;
+    color: #fff;
+    font-size: 14px;
+}
+
+/* Title */
+.title {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.title h1 {
+    font-size: 32px;
+    font-weight: 700;
+}
+
+/* RVS Display */
+.rvs-box {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.rvs-box h2 {
+    font-size: 22px;
+}
+
+.risk-low { color: green; }
+.risk-mid { color: orange; }
+.risk-high { color: red; }
+
+/* Form Container */
+.form-container {
+    width: 70%;
+    margin: auto;
+    background: rgba(255,255,255,0.7);
+    border-radius: 25px;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+.form-group {
+    margin-bottom: 22px;
+}
+
+label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 8px;
+}
+
+input[type="text"],
+input[type="number"] {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+}
+
+.options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.options label {
+    font-weight: 400;
+}
+
+/* Info Tooltip */
+.info {
+    margin-left: 6px;
+    font-weight: 700;
+    cursor: pointer;
+    color: #2563eb;
+    position: relative;
+}
+
+.info:hover::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: 130%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #000;
+    color: #fff;
+    padding: 6px 10px;
+    font-size: 12px;
+    border-radius: 6px;
+    white-space: nowrap;
+}
+
+/* Submit */
+.submit-btn {
+    display: block;
+    margin: 30px auto 0;
+    padding: 12px 35px;
+    background: #2563eb;
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    font-size: 15px;
+    cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="top-bar">
+    <a href="homepage.html" class="back">←</a>
+    <button class="update-btn">Sample filled Form</button>
+</div>
+
+<div class="title">
+    <h1>Building Details</h1>
+</div>
+
+<div class="rvs-box">
+    <h2 id="rvsScore">RVS Score: --</h2>
+    <h3 id="riskLevel"></h3>
+</div>
+
+<div class="form-container">
+<form id="buildingForm">
+
+    <div class="form-group">
+        <label>Address</label>
+        <input type="text">
+    </div>
+
+    <div class="form-group">
+        <label>Coordinates</label>
+        <input type="number" id="lat" placeholder="Latitude" step="any"><br><br>
+        <input type="number" id="lon" placeholder="Longitude" step="any">
+    </div>
+
+    <div class="form-group">
+        <label>No. of Stories</label>
+        <input type="number" id="stories">
+    </div>
+
+    <div class="form-group">
+        <label>Year Built</label>
+        <input type="number" id="year">
+    </div>
+
+    <div class="form-group">
+        <label>Plan Shape</label>
+        <div class="options">
+            <label><input type="radio" name="plan" value="regular"> Rectangular</label>
+            <label><input type="radio" name="plan" value="irregular"> L / U / Irregular</label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Visual Condition</label>
+        <div class="options">
+            <label><input type="radio" name="condition" value="good"> Good</label>
+            <label><input type="radio" name="condition" value="bad"> Bad</label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Soil Type</label>
+        <div class="options">
+            <label><input type="radio" name="soil" value="hard"> Hard</label>
+            <label><input type="radio" name="soil" value="soft"> Soft</label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Building Type</label>
+        <div class="options">
+            <label>
+                <input type="radio" name="type" value="RC">
+                RC <span class="info" data-tip="Reinforced Concrete frame with beams and columns">ⓘ</span>
+            </label>
+
+            <label>
+                <input type="radio" name="type" value="URM">
+                URM <span class="info" data-tip="Unreinforced brick or stone masonry buildings">ⓘ</span>
+            </label>
+
+            <label>
+                <input type="radio" name="type" value="MRF">
+                MRF <span class="info" data-tip="Moment Resisting Frame designed for earthquakes">ⓘ</span>
+            </label>
+        </div>
+    </div>
+
+    <button type="button" class="submit-btn" onclick="calculateRVS()">
+        Submit
+    </button>
+
+</form>
+</div>
+
+<script>
+function calculateRVS() {
+    let rvs = 4.0;
+
+    const stories = +document.getElementById("stories").value;
+    const year = +document.getElementById("year").value;
+    const lat = document.getElementById("lat").value;
+    const lon = document.getElementById("lon").value;
+
+    const plan = document.querySelector('input[name="plan"]:checked')?.value;
+    const condition = document.querySelector('input[name="condition"]:checked')?.value;
+    const soil = document.querySelector('input[name="soil"]:checked')?.value;
+    const type = document.querySelector('input[name="type"]:checked')?.value;
+
+    if (!lat || !lon) {
+        alert("Please enter coordinates");
+        return;
+    }
+
+    if (type === "URM") rvs -= 1.0;
+    if (stories > 4) rvs -= 0.7;
+    if (year < 2000) rvs -= 0.5;
+    if (condition === "bad") rvs -= 0.8;
+    if (soil === "soft") rvs -= 0.6;
+    if (plan === "irregular") rvs -= 0.5;
+
+    rvs = rvs.toFixed(1);
+
+    document.getElementById("rvsScore").innerText =
+        `RVS Score: ${rvs}`;
+
+    let riskText = "";
+    let riskClass = "";
+
+    if (rvs >= 3.0) {
+        riskText = "Low Seismic Risk";
+        riskClass = "risk-low";
+    } else if (rvs >= 2.0) {
+        riskText = "Moderate Seismic Risk";
+        riskClass = "risk-mid";
+    } else {
+        riskText = "High Seismic Risk";
+        riskClass = "risk-high";
+    }
+
+    const riskEl = document.getElementById("riskLevel");
+    riskEl.innerText = riskText;
+    riskEl.className = riskClass;
+
+    setTimeout(() => {
+        window.location.href =
+          `weather.html?lat=${lat}&lon=${lon}&rvs=${rvs}`;
+    }, 1200);
+}
+</script>
+
+</body>
+</html>

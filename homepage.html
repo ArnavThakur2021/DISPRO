@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Natural Disaster Alert System</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #dfe6ea;
+    color: #000;
+}
+
+/* Top Header */
+.header {
+    padding: 25px 50px;
+}
+
+.header .hello {
+    font-size: 22px;
+    font-weight: 600;
+}
+
+/* Main Title Section */
+.title-section {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.title-section h1 {
+    font-size: 36px;
+    font-weight: 700;
+}
+
+.title-section p {
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* Divider */
+.divider {
+    margin: 30px auto;
+    width: 100%;
+    border: none;
+    border-top: 1px solid #aaa;
+}
+
+/* Cards Section */
+.cards {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    margin-top: 50px;
+    padding-bottom: 60px;
+    flex-wrap: wrap;
+}
+
+.card {
+    width: 420px;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 25px;
+    padding: 35px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+.card h2 {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.card p {
+    font-size: 15px;
+    color: #374151;
+    line-height: 1.7;
+    margin-bottom: 30px;
+}
+
+/* Buttons */
+.card button {
+    background: #5480df;
+    color: #fff;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 30px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.card button:hover {
+    background: #3b69ba;
+}
+</style>
+</head>
+
+<body>
+
+<!-- Header -->
+<div class="header">
+    <div class="hello">Hello Pratyaksh</div>
+</div>
+
+<!-- Title -->
+<div class="title-section">
+    <h1>Disaster Protection System</h1>
+    <p>Disaster's Don't Warn – We Do</p>
+</div>
+
+<hr class="divider">
+
+<!-- Cards -->
+<div class="cards">
+    <div class="card">
+        <h2>Add Building Details</h2>
+        <p>
+            Enter structural information of your building to assess safety risks
+            and receive disaster-specific alerts.
+        </p>
+
+        <button><a href="buildingDetails.html">Add Details</a></button>
+    </div>
+
+    <div class="card">
+        <h2>View Local Weather</h2>
+        <p>
+            Get real-time weather alerts, forecasts, and disaster warnings
+            tailored to your location.
+        </p>
+        <button><a href="weather.html">Weather Details</a></button>
+    </div>
+</div>
+
+</body>
+</html>
