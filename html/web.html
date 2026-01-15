@@ -127,17 +127,22 @@
 
         var coordDiv = document.getElementById('coordinate-display');
 
-        // Interaction: Highlight location with cursor to fetch GPS details [cite: 24, 35]
+        // Interaction: Highlight location with cursor to fetch GPS details 
         map.on('mousemove', function(e) {
             var lat = e.latlng.lat.toFixed(4);
             var lng = e.latlng.lng.toFixed(4);
             
-            coordDiv.innerHTML = `LIVE GPS | Latitude: ${lat} | Longitude: ${lng}`;
+            document.getElementById('lat-display').innerHTML = "Latitude: " + lat; 
+            document.getElementById('lng-display').innerHTML = "Longitude: " + lng; 
+    
+            // 3. Optional: Update status to show active tracking
+            document.getElementById('status-display').innerHTML = "Status: Tracking Location"; 
         });
 
-        // Click to evaluate danger for a specific building/user [cite: 8]
-        map.on('click', function(e) {
-            alert("Analyzing Risk Severity for Lat: " + e.latlng.lat.toFixed(2) + ". [cite: 28");
+        // Click to evaluate danger for a specific building/user 
+        map.on('mousemove', function(e) {
+            document.getElementById('lat-display').innerHTML = "Latitude: " + e.latlng.lat.toFixed(4);
+            document.getElementById('lng-display').innerHTML = "Longitude: " + e.latlng.lng.toFixed(4);
         });
     });
 </script>
