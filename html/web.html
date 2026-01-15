@@ -91,48 +91,47 @@
         </div>
     </div>
 </section>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
 <section class="map-section">
     <div class="container">
         <h2>Real-Time Hazard & Alert Map: India</h2>
+        <p>Tracking hazards, vulnerability, and resources around your building location. [cite: 59, 60]</p>
+        
         <div id="india-map"></div>
-        <div id="coordinate-display"></div>
+        
+        <div id="coordinate-display">Point to a location to see GPS data</div>
     </div>
 </section>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
 <script>
-    // 1. Initialize map centered on India (no markers)
-    var map = L.map('india-map').setView([22.9734, 78.6569], 5);
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize map centered on India
+        // This supports the DISPRO goal to detect disasters based on region [cite: 62]
+        var map = L.map('india-map').setView([20.5937, 78.9629], 5);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
+        // Add the physical map tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
 
-    // 2. Create a floating tooltip for the cursor
-    var cursorTooltip = L.tooltip({
-        permanent: false,
-        direction: 'top',
-        opacity: 0.9
-    });
+        var coordDiv = document.getElementById('coordinate-display');
 
-    // 3. Follow cursor and show coordinates
-    map.on('mousemove', function(e) {
-        var lat = e.latlng.lat.toFixed(4);
-        var lng = e.latlng.lng.toFixed(4);
-        
-        // Update the text box below the map
-        document.getElementById('coordinate-display').innerHTML = 
-            `Current GPS: Lat ${lat}, Lng ${lng} | Hazard Status: Monitoring...`;
+        // Interaction: Highlight location with cursor to fetch GPS details [cite: 24, 35]
+        map.on('mousemove', function(e) {
+            var lat = e.latlng.lat.toFixed(4);
+            var lng = e.latlng.lng.toFixed(4);
+            
+            coordDiv.innerHTML = `LIVE GPS | Latitude: ${lat} | Longitude: ${lng}`;
+        });
 
-        // Make the tooltip follow the mouse
-        cursorTooltip
-            .setLatLng(e.latlng)
-            .setContent("Location: " + lat + ", " + lng)
-            .addTo(map);
-    });
-
-    // 4. Remove tooltip when mouse leaves the map
-    map.on('mouseout', function() {
-        map.closeTooltip();
+        // Click to evaluate danger for a specific building/user [cite: 8]
+        map.on('click', function(e) {
+            alert("Analyzing Risk Severity for Lat: " + e.latlng.lat.toFixed(2) + ". [cite: 28, 98]");
+        });
     });
 </script>
 <footer class="dispro-footer">
