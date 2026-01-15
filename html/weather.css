@@ -19,6 +19,30 @@ body {
     padding: 40px 20px;
 }
 
+.back-btn {
+    position: fixed;
+    top: 24px;
+    left: 24px;
+    padding: 10px 18px;
+    border-radius: 30px;
+    text-decoration: none;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    transition: all 0.25s ease;
+    z-index: 1000;
+}
+
+.back-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateX(-4px);
+}
+
+
 h1 {
     font-size: 32px;
     margin-bottom: 8px;
