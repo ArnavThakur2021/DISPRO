@@ -91,30 +91,78 @@
         </div>
     </div>
 </section>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
 <section class="map-section">
     <div class="container">
-        <h2>Real-Time Hazard & Alert Map: India</h2>
-        <p>Live monitoring of fault lines, river banks, and active disaster zones.</p>
-        
+        <h2>DISPRO Geographic Monitoring</h2>
         <div id="india-map"></div>
+        
+        <div id="coordinate-info">
+            <strong>System Status:</strong> Monitoring <br>
+            <span id="lat-display">Latitude: --</span> <br>
+            <span id="lng-display">Longitude: --</span>
+        </div>
     </div>
 </section>
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
 <script>
-    // Initialize the map centered on India
-    var map = L.map('india-map').setView([20.5937, 78.9629], 5);
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize map centered on India
+        var map = L.map('india-map').setView([22.9734, 78.6569], 5);
 
-    // Add OpenStreetMap layer
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
 
-    // Example Marker for a Hazard Zone (e.g., Seismic Fault Line)
-    var marker = L.marker([28.6139, 77.2090]).addTo(map);
-    marker.bindPopup("<b>Delhi Region</b><br>Seismic Alert: Low Risk.").openPopup();
+        // Styling for the regions (States/Zones)
+        function style(feature) {
+            return {
+                fillColor: '#58CCED',
+                weight: 2, // Standard thickness
+                opacity: 1,
+                color: 'white',
+                fillOpacity: 0.4
+            };
+        }
+
+        // 1. Highlight function: Makes the area BOLDER and shows status
+        function highlightFeature(e) {
+            var layer = e.target;
+            layer.setStyle({
+                weight: 5,         // Bolder border
+                color: '#1a1a1a',  // Darker color to stand out
+                fillOpacity: 0.7
+            });
+            layer.bringToFront();
+        }
+
+        // 2. Reset function: Returns to normal
+        function resetHighlight(e) {
+            geojson.resetStyle(e.target);
+        }
+
+        // 3. Coordinate Tracking: Updates Lat/Lng display
+        map.on('mousemove', function(e) {
+            document.getElementById('lat-display').innerHTML = "Latitude: " + e.latlng.lat.toFixed(4);
+            document.getElementById('coordinate-info').style.display = "block";
+            document.getElementById('lng-display').innerHTML = "Longitude: " + e.latlng.lng.toFixed(4);
+        });
+
+        // Binding events to the map data
+        function onEachFeature(feature, layer) {
+            layer.on({
+                mouseover: highlightFeature,
+                mouseout: resetHighlight
+            });
+        }
+
+        // Loading the GeoJSON data (Requires a geojson file/variable)
+        var geojson = L.geoJson(indiaStatesData, {
+            style: style,
+            onEachFeature: onEachFeature
+        }).addTo(map);
+    });
 </script>
 <footer class="dispro-footer">
     <div class="footer-container">
