@@ -9,18 +9,24 @@
 <body>
     <header>
         <nav class="navbar">
-            <a href="#" class="nav-logo">
+            <a href="web.html#" class="nav-logo">
                 <img src="../Gemini_Generated_Image_gecqxbgecqxbgecq.png" alt="DISPRO Logo" height ="100" width="5">
                 <h2 class="logo-text"> DISPRO</h2>
             </a>
             <ul class"nav-menu">
                 <ul class="nav-menu">
-                <li class="nav-item"><a href="file:///C:/Users/Lenovo/Desktop/DISPRO/html/web2.html#" class="nav-link">Home</a></li>
-                <li class="nav-item"><a href="#" class="nav-link">About</a></li>
-                <li class="nav-item"><a href="#" class="nav-link">Menu </a></li>
-                <li class="nav-item"><a href="#" class="nav-link">Services</a></li>
-                <li class="nav-item"><a href="#" class="nav-link">Contact</a></li>
-                <li class="nav-item nav-signin" align='right'><a href="login.html" class="nav-link signin-btn">Sign In</a></li>
+                <li class="nav-item"><a href="web.html#" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="about.html#" class="nav-link">About</a></li>
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link">Menu <i class="fas fa-caret-down"></i></a>
+                    <ul class="submenu">
+                        <li><a href="buildingDetails.html">Calculate RVS score of your building</a></li>
+                        <li><a href="alerts.html">Disaster alert</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item"><a href="services.html#" class="nav-link">Services</a></li>
+                <li class="nav-item"><a href="contact.html#" class="nav-link">Contact Us</a></li>
+                <li class="nav-item nav-signin" align='right'><a href="loginPage.html#" class="nav-link signin-btn">Sign In</a></li>
             </ul>
         </nav>
     </header>
@@ -85,6 +91,31 @@
         </div>
     </div>
 </section>
+<section class="map-section">
+    <div class="container">
+        <h2>Real-Time Hazard & Alert Map: India</h2>
+        <p>Live monitoring of fault lines, river banks, and active disaster zones.</p>
+        
+        <div id="india-map"></div>
+    </div>
+</section>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+    // Initialize the map centered on India
+    var map = L.map('india-map').setView([20.5937, 78.9629], 5);
+
+    // Add OpenStreetMap layer
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Example Marker for a Hazard Zone (e.g., Seismic Fault Line)
+    var marker = L.marker([28.6139, 77.2090]).addTo(map);
+    marker.bindPopup("<b>Delhi Region</b><br>Seismic Alert: Low Risk.").openPopup();
+</script>
 <footer class="dispro-footer">
     <div class="footer-container">
         <div class="footer-brand">
