@@ -1,127 +1,143 @@
 /* ===============================
-   CONFIG
+   CONFIG & INITIALIZATION
 ================================ */
-const API_KEY = "56728136823a70c41a267d674f55753d";
-const BACKEND = "https://YOUR_RENDER_BACKEND_URL"; // CHANGE THIS
+const API_KEY = "75a24e92e0508b4b75dff2442372d69a";
+const BACKEND = "http://localhost:5000";
+let lat, lon, rvs, buildingUse;
 
-let lat, lon, rvs;
-
-/* ===============================
-   LOAD BUILDING DATA FIRST
-================================ */
-fetch(`${BACKEND}/api/building/my-building`, {
-    headers: {
-        "Authorization": localStorage.getItem("token")
-    }
-})
-.then(res => res.json())
-.then(b => {
-    if (!b || !b.latitude || !b.longitude) {
-        document.getElementById("alertText").innerText =
-            "Building data not found. Please fill building details.";
-        return;
-    }
-
-    lat = b.latitude;
-    lon = b.longitude;
-    rvs = b.rvsScore;
-
-    fetchWeather();
-})
-.catch(() => {
-    document.getElementById("alertText").innerText =
-        "Unable to load building data";
-});
-
-/* ===============================
-   DAY / NIGHT CHECK
-================================ */
-function isNightTime() {
-    const h = new Date().getHours();
-    return h >= 19 || h <= 4;
-}
-
-/* ===============================
-   FETCH WEATHER
-================================ */
-function fetchWeather() {
-    fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`)
-        .then(res => res.json())
-        .then(processWeather)
-        .catch(() => {
-            document.getElementById("alertText").innerText =
-                "Unable to load weather data";
+/**
+ * INITIALIZATION: Load Building Telemetry
+ * Fetches specific vulnerability data to personalize alerts.
+ */
+async function initDISPRO() {
+    try {
+        const response = await fetch(`${BACKEND}/api/building/my-building`, {
+            headers: { "Authorization": localStorage.getItem("token") }
         });
+        const b = await response.json();
+
+        if (!b || !b.latitude || !b.longitude) {
+            updateAlertStatus("Building telemetry missing. Please complete assessment.");
+            return;
+        }
+
+        lat = b.latitude;
+        lon = b.longitude;
+        rvs = parseFloat(b.rvs_score);
+        buildingUse = b.building_use;
+
+        fetchWeather();
+        // Poll weather every 15 minutes for real-time protection
+        setInterval(fetchWeather, 900000); 
+    } catch (err) {
+        updateAlertStatus("System Offline: Unable to load building telemetry.");
+    }
 }
 
 /* ===============================
-   PROCESS WEATHER
+   WEATHER INTEGRATION
+================================ */
+async function fetchWeather() {
+    try {
+        const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`;
+        const res = await fetch(url);
+        const data = await res.json();
+        processWeather(data);
+    } catch (err) {
+        updateAlertStatus("Sensor Error: Unable to fetch real-time weather data.");
+    }
+}
+
+/* ===============================
+   RISK ANALYSIS ENGINE
 ================================ */
 function processWeather(data) {
     const temp = Math.round(data.main.temp);
-    const wind = data.wind.speed;
+    const wind = data.wind.speed; // m/s
     const rain = data.rain ? (data.rain["1h"] || 0) : 0;
-    const pressure = data.main.pressure;
-    const weather = data.weather[0].main;
-    const night = isNightTime();
+    const weatherMain = data.weather[0].main;
+    const isNight = isNightTime();
 
     document.getElementById("temperature").innerText = `${temp}°C`;
 
-    if (weather === "Thunderstorm") setThunderstorm();
+    // Hazard Detection Logic
+    if (temp > 40) setHeatWave(temp);
     else if (wind > 17) setCyclone(wind);
-    else if (rain > 20 && pressure < 1000) setFlood();
-    else if (rain > 10) setRain();
-    else if (wind > 8) setWindy(wind);
-    else setClear(night);
+    else if (rain > 20) setFloodRisk();
+    else if (weatherMain === "Thunderstorm") setThunderstorm();
+    else if (temp < 5 && rain > 5) setLandslideWarning();
+    else setNormalConditions(isNight);
 
-    applyRvsImpact();
+    applyVulnerabilityImpact();
 }
 
 /* ===============================
-   UI STATES
+   DYNAMIC UI STATES
 ================================ */
-function setClear(night) {
-    document.body.style.backgroundImage =
-        night ? "url('images/night.jpg')" : "url('images/brightday.jpg')";
-    document.getElementById("weatherIcon").src =
-        night ? "images/moon.jpg" : "images/sun.jpg";
 
-    document.getElementById("alertText").innerText =
-        "Weather Conditions Are Normal";
-    document.getElementById("currentStatus").innerText =
-        night ? "Currently: Clear Night" : "Currently: Clear";
-    document.getElementById("houseStatus").innerText =
-        "No immediate threat detected for your building.";
-
+function setNormalConditions(night) {
+    setBG(night ? "night.jpg" : "brightday.jpg", night ? "moon.jpg" : "sun.jpg");
+    updateStatus("Normal", "Atmospheric conditions are currently stable.");
     setLists(
-        ["Stay informed", "Maintain emergency kit"],
-        ["Ignore safety advisories"]
+        ["Monitor local news", "Check emergency supplies"],
+        ["Ignore system updates"]
     );
 }
 
-function setWindy(speed) {
-    setBG("windy.jpg", "wind.jpg");
-    setStatus("Windy", `Windy (${speed.toFixed(1)} m/s)`);
-}
-
-function setRain() {
-    setBG("rainy.jpg", "rain.jpg");
-    setStatus("Heavy Rain", "Heavy rainfall detected");
-}
-
-function setFlood() {
-    setBG("floody.jpg", "flood.jpg");
-    setStatus("Flood Risk", "Flood alert in your area");
-}
-
-function setThunderstorm() {
-    setBG("stormy.jpg", "storm.jpg");
-    setStatus("Thunderstorm", "Lightning and strong winds possible");
+function setHeatWave(temp) {
+    setBG("heatwave.jpg", "heat.jpg");
+    updateStatus("Heat Wave", `Extreme Temperature detected: ${temp}°C`);
+    setLists(
+        ["Stay hydrated", "Use cooling centers", "Check on elderly neighbors"],
+        ["Outdoor activities", "Leaving children in vehicles"]
+    );
 }
 
 function setCyclone(speed) {
-    setBG("cyclone2.jpg", "cyclone.jpg");
-    setStatus("Cyclone", `Severe winds (${speed.toFixed(1)} m/s)`);
+    const intensity = speed > 32 ? "Severe" : "Moderate";
+    setBG("cyclone.jpg", "wind.jpg");
+    updateStatus(`${intensity} Cyclone`, `High wind speeds: ${speed} m/s`);
+    setLists(
+        ["Secure loose objects", "Move to interior rooms", "Switch off utilities"],
+        ["Standing near windows", "Driving during peak winds"]
+    );
+}
+
+function setFloodRisk() {
+    setBG("flood.jpg", "rain.jpg");
+    updateStatus("Flood Alert", "Heavy precipitation detected; risk of flash flooding.");
+    setLists(
+        ["Move to higher ground", "Pack essential documents", "Follow evacuation routes"],
+        ["Walking through floodwaters", "Driving over submerged roads"]
+    );
+}
+
+/* ===============================
+   VULNERABILITY OVERLAY
+================================ */
+function applyVulnerabilityImpact() {
+    if (isNaN(rvs)) return;
+
+    const el = document.getElementById("houseStatus");
+    const isVulnerable = rvs < 2.5;
+
+    // Logic: Personalized alerts based on building-specific telemetry
+    if (isVulnerable) {
+        el.innerHTML = `<span style="color:#e74c3c">⚠ CRITICAL: Structure is highly vulnerable to local hazards.</span>`;
+        // Inject mandatory "Do" for vulnerable structures
+        const dos = document.getElementById("dosList");
+        dos.innerHTML += `<li style="color:#e74c3c">• IMMEDIATE: Identify nearest public shelter.</li>`;
+    } else {
+        el.innerHTML = `<span style="color:#2ecc71">✔ SECURE: Structural safety rating is adequate.</span>`;
+    }
+}
+
+/* ===============================
+   UTILITIES
+================================ */
+function isNightTime() {
+    const h = new Date().getHours();
+    return h >= 19 || h <= 5;
 }
 
 function setBG(bg, icon) {
@@ -129,30 +145,19 @@ function setBG(bg, icon) {
     document.getElementById("weatherIcon").src = `images/${icon}`;
 }
 
-function setStatus(state, msg) {
+function updateStatus(state, msg) {
     document.getElementById("alertText").innerText = msg;
-    document.getElementById("currentStatus").innerText =
-        `Currently: ${state}`;
+    document.getElementById("currentStatus").innerText = `Current Status: ${state}`;
 }
 
-/* ===============================
-   RVS IMPACT
-================================ */
-function applyRvsImpact() {
-    if (isNaN(rvs)) return;
-
-    const el = document.getElementById("houseStatus");
-    el.innerText += rvs < 2.5
-        ? " ⚠ This building is structurally vulnerable."
-        : " ✔ Structural vulnerability is low.";
+function updateAlertStatus(msg) {
+    document.getElementById("alertText").innerText = msg;
 }
 
-/* ===============================
-   LIST HANDLER
-================================ */
 function setLists(dos, donts) {
-    document.getElementById("dosList").innerHTML =
-        dos.map(d => `<li>• ${d}</li>`).join("");
-    document.getElementById("dontsList").innerHTML =
-        donts.map(d => `<li>• ${d}</li>`).join("");
+    document.getElementById("dosList").innerHTML = dos.map(d => `<li>• ${d}</li>`).join("");
+    document.getElementById("dontsList").innerHTML = donts.map(d => `<li>• ${d}</li>`).join("");
 }
+
+// Start DISPRO Core
+initDISPRO();

@@ -1,31 +1,27 @@
 const express = require('express');
 const router = express.Router();
-const Building = require('../models/Building');
+const pool = require('../config/db'); // Your PostgreSQL pool
 
-router.post('/calculate', async (req, res) => {
-    const { stories, soil, structure } = req.body;
-    
-    // Core Risk Analysis Logic
-    let score = 5.0;
-    if (stories > 3) score -= 0.5;
-    if (soil === 'Soft') score -= 1.0;
-    if (structure === 'Masonry') score -= 1.2;
+// This matches the 'Submit' button in buildingDetails.html
+router.post('/save', async (req, res) => {
+    try {
+        const { address, latitude, longitude, rvsScore } = req.body;
+        // Logic to save building details into PostgreSQL
+        await pool.query(
+            'INSERT INTO buildings (address, latitude, longitude, rvs_score) VALUES ($1, $2, $3, $4)',
+            [address, latitude, longitude, rvsScore]
+        );
+        res.status(201).json({ message: "Building data saved" });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
 
-    const newBuilding = await Building.create({ ...req.body, rvsScore: score });
-    res.json(newBuilding);
+// This matches the 'my-building' check in weather.js
+router.get('/my-building', async (req, res) => {
+    // Logic to fetch the latest building for the user
+    const result = await pool.query('SELECT * FROM buildings ORDER BY created_at DESC LIMIT 1');
+    res.json(result.rows[0]);
 });
 
 module.exports = router;
-// Route to get all buildings for a specific user
-router.get('/user/:userId', async (req, res) => {
-    try {
-        const { userId } = req.params;
-        const result = await pool.query(
-            'SELECT * FROM buildings WHERE user_id = $1 ORDER BY created_at DESC', 
-            [userId]
-        );
-        res.json(result.rows);
-    } catch (err) {
-        res.status(500).json({ error: "Failed to retrieve history" });
-    }
-});
