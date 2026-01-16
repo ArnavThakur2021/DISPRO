@@ -138,7 +138,37 @@
             // 3. Optional: Update status to show active tracking
             document.getElementById('status-display').innerHTML = "Status: Tracking Location"; 
         });
+        async function analyzeBuilding(stories, soil, structure) {
+            const lat = document.getElementById('lat-display').innerText.split(': ')[1];
+            const lng = document.getElementById('lng-display').innerText.split(': ')[1];
 
+            const buildingData = {
+                userId: 1, // Placeholder for logged-in user
+                address: "User Selected Location",
+                lat: parseFloat(lat),
+                lng: parseFloat(lng),
+                stories: parseInt(stories),
+                soil: soil,
+                structure: structure
+            };
+
+            try {
+                const response = await fetch('http://localhost:5000/api/building/calculate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(buildingData)
+                });
+
+                const result = await response.json();
+                
+                // Update Status on UI with RVS Score
+                document.getElementById('status-display').innerHTML = 
+                    `Status: Safety Score ${result.rvsScore}`;
+                
+            } catch (error) {
+                console.error('Error connecting to DISPRO backend:', error);
+            }
+        }
         // Click to evaluate danger for a specific building/user 
         map.on('mousemove', function(e) {
             document.getElementById('lat-display').innerHTML = "Latitude: " + e.latlng.lat.toFixed(4);

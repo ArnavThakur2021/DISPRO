@@ -1,26 +1,22 @@
-const mongoose = require("mongoose");
+const { Pool } = require('pg');
+require('dotenv').config();
 
-const BuildingSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-
-  address: String,
-  latitude: Number,
-  longitude: Number,
-
-  stories: Number,
-  yearBuilt: Number,
-  planShape: String,
-  soilType: String,
-  condition: String,
-  structureType: String,
-
-  buildingUse: String,
-  occupants: Number,
-
-  seismicZone: String,
-  rvsScore: Number,
-
-  createdAt: { type: Date, default: Date.now }
+const pool = new Pool({
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASSWORD,
+  port: process.env.DB_PORT,
 });
 
-module.exports = mongoose.model("Building", BuildingSchema);
+const connectDB = async () => {
+  try {
+    await pool.query('SELECT 1');
+    console.log('PostgreSQL Connected to DISPRODB...');
+  } catch (err) {
+    console.error('Database Connection Failed:', err.message);
+    process.exit(1);
+  }
+};
+
+module.exports = connectDB;
