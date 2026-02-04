@@ -90,6 +90,7 @@ h1 {
 .card {
     width: 300px;
     padding: 20px;
+    margin-top: 100px;
     border-radius: 12px;
     background: rgba(255,255,255,0.95);
     color: #000;

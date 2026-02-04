@@ -212,6 +212,7 @@ input[type="number"] {
 <div class="form-group">
     <label>Visual Condition</label>
     <div class="options">
+        <label><input type="radio" name="condition" value="bad"> Excellent</label>
         <label><input type="radio" name="condition" value="good"> Good</label>
         <label><input type="radio" name="condition" value="bad"> Bad</label>
     </div>
@@ -224,6 +225,14 @@ input[type="number"] {
         <label><input type="radio" name="soil" value="medium"> Medium</label>
         <label><input type="radio" name="soil" value="soft"> Soft</label>
     </div>
+</div>
+
+<div class="form-group">
+<label>Falling Hazards Present?</label>
+<div class="options">
+<label><input type="radio" name="falling" value="yes"> Yes <span class="info" data-tip="Tanks, parapets, cladding">ⓘ</span></label>
+<label><input type="radio" name="falling" value="no"> No</label>
+</div>
 </div>
 
 <div class="form-group">
@@ -283,6 +292,8 @@ function calculateRVS() {
     const soil = document.querySelector('input[name="soil"]:checked')?.value;
     const type = document.querySelector('input[name="type"]:checked')?.value;
     const use = document.querySelector('input[name="use"]:checked')?.value;
+    const falling=document.querySelector('[name=falling]:checked')?.value;
+
 
     if (!address || !lat || !lon || !type || !use || !soil) {
         alert("Please fill all required fields");
@@ -302,41 +313,45 @@ function calculateRVS() {
 
     let rvs = base[zone][type];
 
-    if (stories > 4) rvs -= 0.6;
-    if (year < 2000) rvs -= 0.4;
+    if (stories > 4 && plan == "irregular") rvs -= 0.6;
+    if (year < 1995) rvs -= 0.4;
+    if (condition === "good") rvs -= 0.1;
     if (condition === "bad") rvs -= 0.7;
     if (soil === "medium") rvs -= 0.25;
-    if (soil === "soft") rvs -= 0.5;
-    if (plan === "irregular") rvs -= 0.4;
+    if (soil === "soft") rvs -= 0.6;
+    if (plan === "irregular") rvs -= 0.5;
+    if(falling==="yes") rvs-=0.3;
+
 
     rvs = Number(rvs.toFixed(1));
 
     document.getElementById("rvsScore").innerText =
         `RVS Score: ${rvs}`;
 
-    fetch("https://YOUR_RENDER_BACKEND_URL/api/building/save", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": localStorage.getItem("token")
-        },
-        body: JSON.stringify({
-            address,
-            latitude: lat,
-            longitude: lon,
-            stories,
-            yearBuilt: year,
-            planShape: plan,
-            soilType: soil,
-            condition,
-            structureType: type,
-            buildingUse: use,
-            occupants,
-            seismicZone: zone,
-            rvsScore: rvs
-        })
+    let risk = rvs >= 3.5 ? "Low Seismic Risk" : rvs >= 2.5 ? "Moderate Seismic Risk" : "High Seismic Risk";
+    document.getElementById("riskLevel").innerText = risk;
+    fetch("http://localhost:5000/api/building/save", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+        userId: "demoUser",
+        address,
+        lat,
+        lon,
+        stories,
+        yearBuilt: year,
+        soil,
+        plan,
+        structureType: type,
+        rvsScore: rvs,
+        seismicZone: zone,
+        fallingHazards: falling === "yes"
     })
-    .then(() => window.location.href = "weather.html");
+});
+
+    setTimeout(() => {
+        window.location.href = `weather.html?lat=${lat}&lon=${lon}&rvs=${rvs}`;
+    }, 800);
 }
 </script>
 
