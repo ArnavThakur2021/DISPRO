@@ -421,3 +421,11 @@ header.navbar{
     font-weight: bold;
     color: #333;
 }
+.dashboard-container { padding: 50px 10%; }
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }
+.stat-card { background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); text-align: center; }
+.history-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 10px; overflow: hidden; }
+.history-table th, .history-table td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
+.status-safe { color: #2ecc71; font-weight: bold; }
+.status-warning { color: #f1c40f; font-weight: bold; }
+.status-danger { color: #e74c3c; font-weight: bold; }

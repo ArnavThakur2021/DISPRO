@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DISPRO | User Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body onload="fetchUserHistory()">
+
+    <nav class="navbar">
+        <div class="logo">DISPRO</div>
+        <div class="nav-links">
+            <a href="web.html">Monitoring Map</a>
+            <a href="dashboard.html" class="active">Safety History</a>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <h1>Building Safety History</h1>
+        <p>Review the vulnerability assessments for your registered locations.</p>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3 id="total-reports">0</h3>
+                <p>Total Assessments</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="avg-score">0.0</h3>
+                <p>Average Safety Rating</p>
+            </div>
+        </div>
+
+        <table class="history-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Address</th>
+                    <th>GPS Coordinates</th>
+                    <th>RVS Score</th>
+                    <th>Risk Status</th>
+                </tr>
+            </thead>
+            <tbody id="history-body">
+                </tbody>
+        </table>
+    </div>
+
+    <script>
+        async function fetchUserHistory() {
+            try {
+                const response = await fetch('http://localhost:5000/api/building/user/1'); // Fetching for Test User ID 1
+                const reports = await response.json();
+                
+                const tableBody = document.getElementById('history-body');
+                reports.forEach(report => {
+                    const row = `
+                        <tr>
+                            <td>${new Date(report.created_at).toLocaleDateString()}</td>
+                            <td>${report.address}</td>
+                            <td>${report.latitude}, ${report.longitude}</td>
+                            <td><strong>${report.rvs_score}</strong></td>
+                            <td class="${getRiskClass(report.rvs_score)}">${getRiskStatus(report.rvs_score)}</td>
+                        </tr>
+                    `;
+                    tableBody.innerHTML += row;
+                });
+            } catch (err) {
+                console.error("Dashboard failed to load history:", err);
+            }
+        }
+
+        function getRiskStatus(score) {
+            if (score >= 4) return "Low Risk";
+            if (score >= 2.5) return "Moderate";
+            return "Critical";
+        }
+
+        function getRiskClass(score) {
+            if (score >= 4) return "status-safe";
+            if (score >= 2.5) return "status-warning";
+            return "status-danger";
+        }
+    </script>
+</body>
+</html>
